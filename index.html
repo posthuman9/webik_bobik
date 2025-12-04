@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enter the Secret Code</title>
+    <style>
+        /* Basic Styling for a clean, centered look */
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f4f4f4;
+            text-align: center;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        input[type="password"] {
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            width: 250px;
+            font-size: 16px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        /* The image will be hidden by default */
+        #secret-image {
+            max-width: 100%;
+            height: auto;
+            margin-top: 20px;
+            border-radius: 5px;
+            display: none; /* THIS is what keeps the image hidden initially */
+        }
+        #message {
+            color: red;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Enter the Secret Code to Proceed</h2>
+        
+        <input type="password" id="secretCodeInput" placeholder="Enter code here" required>
+        <button onclick="checkPassword()">Unlock Image</button>
+
+        <p id="message"></p>
+    </div>
+
+    <img id="secret-image" src="https://posthuman9.github.io/webik_bobik/bzz.jpg">
+
+    <script>
+        // *** STEP 1: KDO JE NEJHUSTEJSI BORCATOR? ***
+        const CORRECT_CODE = "dikobraz"; 
+        
+        // *** STEP 2: GET THE ELEMENTS FROM THE PAGE ***
+        const inputField = document.getElementById('secretCodeInput');
+        const imageElement = document.getElementById('secret-image');
+        const messageElement = document.getElementById('message');
+
+        function checkPassword() {
+            // Get the value the user entered and convert it to uppercase for a case-insensitive check
+            const userInput = inputField.value.toUpperCase();
+            
+            // Get the correct code (also converted to uppercase)
+            const correctCode = CORRECT_CODE.toUpperCase();
+
+            if (userInput === correctCode) {
+                // SUCCESS: Show the image and a success message
+                imageElement.style.display = 'block';
+                messageElement.textContent = 'Success! Here is your image.';
+                messageElement.style.color = 'green';
+                
+                // OPTIONAL: Clear the input and hide the button/input area
+                inputField.style.display = 'none';
+                document.querySelector('button').style.display = 'none';
+
+            } else {
+                // FAILURE: Show an error message
+                imageElement.style.display = 'none';
+                messageElement.textContent = 'Incorrect code. Please try again.';
+                messageElement.style.color = 'red';
+                inputField.value = ''; // Clear the input field
+                inputField.focus(); // Keep the focus on the input field
+            }
+        }
+    </script>
+
+</body>
+</html>
