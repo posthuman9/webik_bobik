@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Borcátovatějších Zvířátko</title>
+    <style>
+        /* --- General Styling --- */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #333; /* Fallback color */
+            color: #fff;
+            text-align: center;
+        }
+
+        /* --- Background Styling (The image shown *before* password success) --- */
+        #background-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed; /* Optional: Makes the background static */
+            filter: blur(2px) brightness(0.6); /* Soft blur and darken for readability */
+            z-index: -1; /* Puts the background behind the content */
+            
+            /* *** CRUCIAL CHANGE: Link to your local bzz.png file in the same repository *** */
+            background-image: url("./bzz.png"); 
+        }
+
+        /* --- Content Container Styling --- */
+        .container {
+            background-color: rgba(0, 0, 0, 0.75); /* Semi-transparent black overlay */
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+            max-width: 90%;
+        }
+        
+        h2 {
+            margin-bottom: 25px;
+            font-size: 1.8em;
+            color: #ffcc00; /* Yellow highlight for the question */
+        }
+        
+        input[type="password"] {
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 2px solid #555;
+            border-radius: 6px;
+            width: 250px;
+            font-size: 17px;
+            background-color: #222;
+            color: #fff;
+            transition: border-color 0.3s;
+        }
+        input[type="password"]:focus {
+            border-color: #ffcc00;
+            outline: none;
+        }
+
+        button {
+            padding: 12px 25px;
+            background-color: #ffcc00; /* Yellow button */
+            color: #333;
+            font-weight: bold;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 17px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #e0b300;
+        }
+        #message {
+            margin-top: 15px;
+            font-size: 1.1em;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="background-container"></div>
+
+    <div class="container">
+        <h2 id="question">JAKÝ JE NEJBORCÁTOVATĚJŠÍ ZVÍŘÁTKO?</h2>
+        
+        <input type="password" id="secretCodeInput" placeholder="Zadejte kód" required>
+        <button onclick="checkPassword()">Odemknout</button>
+
+        <p id="message"></p>
+    </div>
+
+    <script>
+        // =========================================================================
+        // === STEP 1: DEFINE YOUR SECRET PASSWORD HERE ===
+        const CORRECT_CODE = "DIKOBRAZ"; // <--- HESLO JE NASTAVENO NA DIKOBRAZ!
+        
+        // === STEP 2: DEFINE YOUR GOOGLE DRIVE SHARE LINK HERE ===
+        // This link must be set to "Anyone with the link" (Viewer)
+        const DRIVE_LINK = "https://drive.google.com/file/d/1bn3TFSOsGv60fGqXbppLeSs4MkBpzyEI/view?usp=sharing"; // <--- VLOŽTE ZDE ODKAZ Z GOOGLE DRIVE
+        // =========================================================================
+
+        const inputField = document.getElementById('secretCodeInput');
+        const messageElement = document.getElementById('message');
+        const questionElement = document.getElementById('question');
+
+        // Allow pressing Enter key to submit
+        inputField.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                checkPassword();
+            }
+        });
+
+        function checkPassword() {
+            // Get the value the user entered and convert to uppercase for case-insensitive comparison
+            const userInput = inputField.value.toUpperCase();
+            const correctCode = CORRECT_CODE.toUpperCase();
+
+            if (userInput === correctCode) {
+                // SUCCESS: Redirect the user to the Google Drive link
+                
+                // 1. Show success message
+                messageElement.textContent = 'Správně! Otevírám tajný odkaz v novém okně...';
+                messageElement.style.color = '#aaffaa'; // Light green for success
+                
+                // 2. Open the Google Drive link in a new tab/window
+                window.open(DRIVE_LINK, '_blank');
+                
+                // 3. Optional: Hide the input area after success
+                inputField.style.display = 'none';
+                document.querySelector('button').style.display = 'none';
+                questionElement.textContent = 'Odkaz otevřen.';
+
+            } else {
+                // FAILURE: Show an error message
+                messageElement.textContent = 'Špatný kód. Zkuste to znovu!';
+                messageElement.style.color = '#ffaaaa'; // Light red for error
+                inputField.value = ''; // Clear the input field
+                inputField.focus(); // Keep the focus on the input field
+            }
+        }
+    </script>
+
+</body>
+</html>
